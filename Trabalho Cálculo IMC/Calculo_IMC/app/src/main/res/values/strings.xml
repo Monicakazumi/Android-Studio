@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Calculo_IMC</string>
+    <string name="msg_erro_campo_vazio">Preenchimento Obrigatório!</string>
+</resources>
