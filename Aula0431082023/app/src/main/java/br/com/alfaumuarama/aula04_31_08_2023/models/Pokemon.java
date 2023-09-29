@@ -16,6 +16,6 @@ public class Pokemon {
     }
 
     public String imagem(){
-        return "";
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/" + id() + ".png";
     }
 }

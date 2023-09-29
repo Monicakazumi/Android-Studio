@@ -3,6 +3,7 @@ package br.com.alfaumuarama.aula04_31_08_2023;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListAdapter;
@@ -69,5 +70,19 @@ public class MainActivity extends ListActivity {
         
         //positon -> tem o indice do item que foi clicado na ListView
         Pokemon pokemon = listaDados.get(position);
+
+        //criando o caminho para a tela de Detalhes
+        Intent tela = new Intent(MainActivity.this, DetalhesActivity.class);
+
+        //criando objeto para enviar os dados para a detalhes
+        Bundle parametros = new Bundle();
+        parametros.putString("nome", pokemon.nome);
+        parametros.putString("imagem", pokemon.imagem());
+
+        //adicionando os paramentros no caminho da tela - put para adiciona
+        tela.putExtras(parametros);
+
+        //abrindo a tela de detralhes
+        startActivity(tela);
     }
 }
