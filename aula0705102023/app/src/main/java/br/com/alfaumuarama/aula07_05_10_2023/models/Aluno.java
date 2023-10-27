@@ -28,7 +28,6 @@ public class Aluno {
     public HashMap<String,String> toMap() {
         HashMap<String,String> dados = new HashMap<>();
 
-
         dados.put("id", String.valueOf(id));
         dados.put("nome", nome);
         dados.put("ra", ra);

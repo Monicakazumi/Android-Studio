@@ -48,7 +48,10 @@ public class TbAluno {
 
     public void gravar(Aluno aluno) {
         //buscando o aluno, filtrando por ID
-        ArrayList<Aluno> lista = buscar(aluno.id);
+        ArrayList<Aluno> lista = new ArrayList<>();
+
+        if (aluno.id > 0)
+            lista = buscar(aluno.id); //buscando o aluno, filtrando por ID
 
         if(lista.size() > 0) { //se existir no banco de dados, altera o registro
             alterar(aluno);
