@@ -1,7 +1,10 @@
 package br.com.alfaumuarama.aula07_05_10_2023;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +14,10 @@ import br.com.alfaumuarama.aula07_05_10_2023.datasource.TbAluno;
 import br.com.alfaumuarama.aula07_05_10_2023.models.Aluno;
 
 public class CadastroActivity extends AppCompatActivity {
+
+    //id da tela Main vai ser salvo nesta variável - só não existe na tela
+    int idAluno = 0;
+
 
     EditText edtNome, edtRA;
     Button btnSalvar, btnExcluir, btnCancelar;
@@ -25,6 +32,23 @@ public class CadastroActivity extends AppCompatActivity {
         btnSalvar = findViewById(R.id.btnSalvar);
         btnExcluir = findViewById(R.id.btnExcluir);
         btnCancelar = findViewById(R.id.btnCancelar);
+
+        //captura o caminho usado para abrir esta tela
+        Intent caminhoRecebido = getIntent();
+
+        //se caminho existe
+        if (caminhoRecebido != null) { //se o caminho existe
+
+            //captura os paramnetros recebidos vindo da outra tela - get ao contrário de put
+            Bundle params = caminhoRecebido.getExtras();
+
+            //se existe os parametros
+            if (params != null) {
+                idAluno = params.getInt("id");
+                edtNome.setText(params.getString("nome"));
+                edtRA.setText(params.getString("ra"));
+            }
+        }
 
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +73,17 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     private void salvar() {
+        if (edtNome.getText().toString().isEmpty()){
+            ShowMensagem("O campo Nome é obrigatório!");
+            return;
+        }
+        if (edtRA.getText().toString().isEmpty()){
+            ShowMensagem("O campo RA é obrigatório!");
+            return;
+        }
+
         Aluno aluno = new Aluno();
+        aluno.id = idAluno;
         aluno.nome = edtNome.getText().toString();
         aluno.ra = edtRA.getText().toString();
 
@@ -60,11 +94,37 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     private void excluir() {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastroActivity.this);
+        alerta.setTitle("Atenção"); //Adicionando o titulo da mensagem
+        alerta.setMessage("Deseja excluir este aluno?"); //Adicionando o texto da mensagem
+        alerta.setNegativeButton("Não", null); //Botao para fechar a mensagem
+        alerta.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                confirmarExclusao();
+            }
+        });
+        alerta.show();
+    }
 
+    private void confirmarExclusao() {
+        TbAluno tbAluno = new TbAluno(CadastroActivity.this);
+        tbAluno.excluir(idAluno);
+
+        onBackPressed(); //Depois de excluir, fecha a tela
     }
 
     private void cancelar() {
         //evento de voltar tela - do Android mesmo
         onBackPressed();
+    }
+
+    private void ShowMensagem(String texto){
+        AlertDialog.Builder alerta = new AlertDialog.Builder(CadastroActivity.this);
+        alerta.setTitle("Atenção"); //Adicionando o titulo da mensagem
+        alerta.setMessage(texto); //Adicionando o texto da mensagem
+        alerta.setNeutralButton("OK", null); //Adicionando Botão de OK
+        alerta.show(); //Exibindo a mensagem na tela
+
     }
 }

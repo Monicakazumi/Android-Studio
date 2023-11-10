@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
@@ -41,6 +42,29 @@ public class MainActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         atualizarLista();
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        //Carregando os dados do aluno selecionado na listView na tela
+        Aluno aluno = listaAlunos.get(position);
+
+        //criando o caminho para abrir a tela de cadastro
+        Intent tela = new Intent(MainActivity.this, CadastroActivity.class);
+
+        //Criando os parametros com os dados do aluno
+        Bundle params = new Bundle();
+        params.putInt("id", aluno.id);
+        params.putString("nome", aluno.nome);
+        params.putString("ra", aluno.ra);
+
+        //Adicionando os parametros no caminho de tela
+        tela.putExtras(params);
+
+        //abrindo a tela de cadastro
+        startActivity(tela);
     }
 
     private void atualizarLista() {
